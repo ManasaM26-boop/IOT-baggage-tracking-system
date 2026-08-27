@@ -1,7 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
+import { getBaggage } from "./api";
 
 function App() {
+  useEffect(() => {
+    const loadBaggage = async () => {
+      try {
+        const data = await getBaggage();
+
+        if (Array.isArray(data) && data.length > 0) {
+          setBags(data);
+        } else if (Array.isArray(data?.results) && data.results.length > 0) {
+          setBags(data.results);
+        }
+      } catch (error) {
+        console.error("Django baggage API error:", error);
+      }
+    };
+
+    loadBaggage();
+  }, []);
   // =========================================================
   // LOGIN
   // =========================================================
